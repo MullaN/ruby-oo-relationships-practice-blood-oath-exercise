@@ -1,5 +1,5 @@
 class Cult
-    attr_accessor :name, :location, :founding_year, :slogan
+    attr_reader :name, :location, :founding_year, :slogan
 
     @@all = []
 
@@ -21,7 +21,7 @@ class Cult
     end
 
     def cult_population
-        self.followers.length
+        self.oaths.length
     end
 
     def self.all
