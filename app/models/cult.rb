@@ -13,15 +13,27 @@ class Cult
     end
 
     def recruit_follower(follower)
-        BloodOath.new("date", self, follower)
+        BloodOath.new(Time.new, self, follower)
     end
 
     def oaths
         BloodOath.all.select {|oath| oath.cult == self}
     end
 
+    def followers
+        self.oaths.map {|oath| oath.follower}.uniq
+    end
+
     def cult_population
         self.oaths.length
+    end
+
+    def average_age
+        self.followers.sum {|follower| follower.age}.to_f / self.followers.length.to_f
+    end
+
+    def my_followers_mottos
+        self.followers.map {|follower| follower.life_motto}
     end
 
     def self.all
@@ -38,5 +50,13 @@ class Cult
 
     def self.find_by_founding_year(year)
         self.all.select {|cult| cult.founding_year == year}
+    end
+
+    def self.least_popular
+        self.all.min_by{|cult| cult.cult_population}
+    end
+
+    def self.most_common_location
+        self.all.max_by{|cult| self.find_by_location(cult.location).length}.location
     end
 end

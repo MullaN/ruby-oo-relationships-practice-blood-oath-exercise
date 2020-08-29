@@ -20,7 +20,11 @@ class Follower
     end
 
     def join_cult(cult)
-        BloodOath.new("date", cult, self)
+        BloodOath.new(Time.new, cult, self)
+    end
+
+    def my_cults_slogans
+        cults.map {|cult| cult.slogan}
     end
 
     def self.all
@@ -29,5 +33,13 @@ class Follower
 
     def self.of_a_certain_age(age)
         self.all.select {|follower| follower.age == age}
+    end
+
+    def self.most_active
+        self.all.max_by {|follower| follower.cults.length}
+    end
+
+    def self.top_ten
+        self.all.sort {|followera, followerb| followera.cults.length <=> followerb.cults.length}.reverse[0..10]
     end
 end
